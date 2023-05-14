@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                             :integer          not null, primary key
+#  avatar                         :string
 #  comments_count                 :integer
 #  email                          :string
 #  likes_count                    :integer
@@ -30,4 +31,5 @@ class User < ApplicationRecord
   def follow_request_for(other_user_id)
     FollowRequest.where({ sender_id: self.id, recipient_id: other_user_id }).at(0)
   end
+  mount_uploader :avatar, AvatarUploader
 end

@@ -16,19 +16,19 @@
 
     <form action="/insert_follow_request" method="post">
       <div>
-        <label for="sender_id_box">
-          Sender
-        </label>
-
-        <input type="text" id="sender_id_box" name="query_sender_id">
-      </div>
-
-      <div>
         <label for="recipient_id_box">
           Recipient
         </label>
 
         <input type="text" id="recipient_id_box" name="query_recipient_id">
+      </div>
+
+      <div>
+        <label for="sender_id_box">
+          Sender
+        </label>
+
+        <input type="text" id="sender_id_box" name="query_sender_id">
       </div>
 
       <div>
@@ -56,11 +56,11 @@
         </th>
 
         <th>
-          Sender
+          Recipient
         </th>
 
         <th>
-          Recipient
+          Sender
         </th>
 
         <th>
@@ -86,11 +86,11 @@
         </td>
 
         <td>
-          <%= a_follow_request.sender_id %>
+          <%= a_follow_request.recipient_id %>
         </td>
 
         <td>
-          <%= a_follow_request.recipient_id %>
+          <%= a_follow_request.sender_id %>
         </td>
 
         <td>

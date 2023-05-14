@@ -1,66 +1,37 @@
-<div>
-  <div>
-    <h1>
+<h1>
       List of all photos
     </h1>
-  </div>
-</div>
 
-<hr>
 
-<div>
-  <div>
+
+ <% if session.fetch(:user_id) != nil %>
+
     <h2>
       Add a new photo
     </h2>
 
-    <form action="/insert_photo" method="post">
-      <div>
-        <label for="caption_box">
-          Caption
-        </label>
-
-        <textarea id="caption_box" name="query_caption" rows="3"></textarea>
-      </div>
+    <form action="/insert_photo" method="post" enctype="multipart/form-data">
 
       <div>
         <label for="image_box">
           Image
         </label>
 
-        <input type="text" id="image_box" name="query_image">
+        <input type="file" id="image_box" name="query_image" placeholder="Enter a URL for the image...">
       </div>
-
-      <div>
-        <label for="owner_id_box">
-          Owner
+<div>
+        <label for="browser_caption">
+          Caption
         </label>
 
-        <input type="text" id="owner_id_box" name="query_owner_id">
-      </div>
-
-      <div>
-        <label for="likes_count_box">
-          Likes count
-        </label>
-
-        <input type="text" id="likes_count_box" name="query_likes_count">
-      </div>
-
-      <div>
-        <label for="comments_count_box">
-          Comments count
-        </label>
-
-        <input type="text" id="comments_count_box" name="query_comments_count">
+          <textarea id="browser_caption" name="query_caption" placeholder="Enter a caption for the photo..."></textarea>
       </div>
 
       <button>
-        Create photo
+        Add photo
       </button>
     </form>
-  </div>
-</div>
+<%end%>
 
 <hr>
 <div>
@@ -68,7 +39,7 @@
     <table border="1">
       <tr>
         <th>
-          ID
+          Image
         </th>
 
         <th>
@@ -76,72 +47,59 @@
         </th>
 
         <th>
-          Image
+         Owner
         </th>
 
         <th>
-          Owner
+          Posted
         </th>
 
         <th>
-          Likes count
-        </th>
-
-        <th>
-          Comments count
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
+          Likes
         </th>
 
         <th>
         </th>
+
       </tr>
-
-      <% @list_of_photos.each do |a_photo| %>
+       <% @list_of_photos.each do |a_photo| %>
+      <%if a_photo.owner.private != true%>
       <tr>
         <td>
-          <%= a_photo.id %>
+         <img src = "<%=a_photo.image%>" class="img-responsive">
         </td>
 
         <td>
           <%= a_photo.caption %>
         </td>
-
         <td>
-          <%= a_photo.image %>
-        </td>
-
-        <td>
-          <%= a_photo.owner_id %>
-        </td>
-
-        <td>
-          <%= a_photo.likes_count %>
-        </td>
-
-        <td>
-          <%= a_photo.comments_count %>
+          <%=a_photo.owner.username%>
         </td>
 
         <td>
           <%= time_ago_in_words(a_photo.created_at) %> ago
         </td>
-        <td>
-          <%= time_ago_in_words(a_photo.updated_at) %> ago
-        </td>
 
         <td>
-          <a href="/photos/<%= a_photo.id %>">
-            Show details
-          </a>
+          <%= a_photo.likes_count %>
         </td>
-      </tr>
+          <% if @current_user == nil %>
+
+            <td>
+              <a href="/user_sign_in">
+                Show details
+              </a>
+            </td>
+          <% else %>
+            <td>
+              <a href="/photos/<%= a_photo.id %>">
+                Show details
+              </a>
+            </td>
+
+          <% end %>
+        </tr>
+      <% end %>
       <% end %>
     </table>
   </div>
