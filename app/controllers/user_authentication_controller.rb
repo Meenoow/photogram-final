@@ -39,15 +39,12 @@ class UserAuthenticationController < ApplicationController
   def create
     @user = User.new
     @user.email = params.fetch("query_email")
-    @user.username = params.fetch("query_username")
-    @user.private = params.fetch("query_private", false)
     @user.password = params.fetch("query_password")
     @user.password_confirmation = params.fetch("query_password_confirmation")
-    @user.likes_count = params.fetch("query_likes_count")
-    @user.comments_count = params.fetch("query_comments_count")
-    @user.sent_follow_requests_count = params.fetch("query_sent_follow_requests_count")
-    @user.received_follow_requests_count = params.fetch("query_received_follow_requests_count")
-    @user.own_photos_count = params.fetch("query_own_photos_count")
+    @user.comments_count = 0
+    @user.likes_count = 0
+    @user.private = params.fetch("query_private", false)
+    @user.username = params.fetch("query_username")
 
     save_status = @user.save
 
@@ -67,15 +64,12 @@ class UserAuthenticationController < ApplicationController
   def update
     @user = @current_user
     @user.email = params.fetch("query_email")
-    @user.username = params.fetch("query_username")
-    @user.private = params.fetch("query_private", false)
     @user.password = params.fetch("query_password")
     @user.password_confirmation = params.fetch("query_password_confirmation")
-    @user.likes_count = params.fetch("query_likes_count")
     @user.comments_count = params.fetch("query_comments_count")
-    @user.sent_follow_requests_count = params.fetch("query_sent_follow_requests_count")
-    @user.received_follow_requests_count = params.fetch("query_received_follow_requests_count")
-    @user.own_photos_count = params.fetch("query_own_photos_count")
+    @user.likes_count = params.fetch("query_likes_count")
+    @user.private = params.fetch("query_private", false)
+    @user.username = params.fetch("query_username")
     
     if @user.valid?
       @user.save

@@ -8,22 +8,24 @@ class PhotosController < ApplicationController
   end
 
   def show
+    if session.fetch(:user_id) != nil
     the_id = params.fetch("path_id")
-
     matching_photos = Photo.where({ :id => the_id })
-
     @the_photo = matching_photos.at(0)
-
+    @user_like_checker = @the_photo.likes.where({ :fan_id => @current_user.id }).first 
     render({ :template => "photos/show.html.erb" })
+    else
+      redirect_to("/user_sign_in", { :alert => "You have to sign in first." })
+    end
   end
 
   def create
     the_photo = Photo.new
     the_photo.caption = params.fetch("query_caption")
+    the_photo.comments_count = 0
     the_photo.image = params.fetch("query_image")
-    the_photo.owner_id = params.fetch("query_owner_id")
-    the_photo.likes_count = params.fetch("query_likes_count")
-    the_photo.comments_count = params.fetch("query_comments_count")
+    the_photo.likes_count = 0
+    the_photo.owner_id = session.fetch(:user_id)
 
     if the_photo.valid?
       the_photo.save
@@ -38,10 +40,10 @@ class PhotosController < ApplicationController
     the_photo = Photo.where({ :id => the_id }).at(0)
 
     the_photo.caption = params.fetch("query_caption")
-    the_photo.image = params.fetch("query_image")
-    the_photo.owner_id = params.fetch("query_owner_id")
-    the_photo.likes_count = params.fetch("query_likes_count")
     the_photo.comments_count = params.fetch("query_comments_count")
+    the_photo.image = params.fetch("query_image")
+    the_photo.likes_count = params.fetch("query_likes_count")
+    the_photo.owner_id = params.fetch("query_owner_id")
 
     if the_photo.valid?
       the_photo.save
