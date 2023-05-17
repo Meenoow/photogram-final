@@ -1,5 +1,5 @@
-<h1><%=@the_user.username%></h1>
-
+ <h1><%=@the_user.username%></h1>
+ 
 <!--if the user is private display yes else no-->
 <dl>
   <dt>Private</dt>
@@ -19,6 +19,7 @@
      <%@pending_followers.each do |request| %>
        <%if request.status == "pending"%>
        <%=request.recipient.username %>
+      
        <div>
               <form action="/modify_follow_request/<%=request.id%>"  method="post" >
 

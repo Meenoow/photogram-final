@@ -1,56 +1,63 @@
 class FollowRequestsController < ApplicationController
   def index
-    matching_likes = Like.all
+    matching_follow_requests = FollowRequest.all
 
-    @list_of_likes = matching_likes.order({ :created_at => :desc })
+    @list_of_follow_requests = matching_follow_requests.order({ :created_at => :desc })
 
-    render({ :template => "likes/index.html.erb" })
+    render({ :template => "follow_requests/index.html.erb" })
   end
 
   def show
     the_id = params.fetch("path_id")
 
-    matching_likes = Like.where({ :id => the_id })
+    matching_follow_requests = FollowRequest.where({ :id => the_id })
 
-    @the_like = matching_likes.at(0)
+    @the_follow_request = matching_follow_requests.at(0)
 
-    render({ :template => "likes/show.html.erb" })
+    render({ :template => "follow_requests/show.html.erb" })
   end
 
   def create
-    the_like = Like.new
-    the_like.fan_id = params.fetch("query_fan_id")
-    the_like.photo_id = params.fetch("query_photo_id")
+    follow_request = FollowRequest.new
+    follow_request.recipient_id = params.fetch("query_recipient_id")
+    follow_request.sender_id = session.fetch(:user_id)
 
-    if the_like.valid?
-      the_like.save
-      redirect_to("/likes", { :notice => "Like created successfully." })
+    if follow_request.recipient.private
+      follow_request.status = "pending"
     else
-      redirect_to("/likes", { :alert => the_like.errors.full_messages.to_sentence })
+      follow_request.status = "accepted"
+    end
+
+    if follow_request.valid?
+      follow_request.save
+      redirect_to("/follow_requests", { :notice => "Follow request created successfully." })
+    else
+      redirect_to("/follow_requests", { :alert => follow_request.errors.full_messages.to_sentence })
     end
   end
 
   def update
     the_id = params.fetch("path_id")
-    the_like = Like.where({ :id => the_id }).at(0)
+    the_follow_request = FollowRequest.where({ :id => the_id }).at(0)
 
-    the_like.fan_id = params.fetch("query_fan_id")
-    the_like.photo_id = params.fetch("query_photo_id")
+    the_follow_request.recipient_id = params.fetch("query_recipient_id")
+    the_follow_request.sender_id = params.fetch("query_sender_id")
+    the_follow_request.status = params.fetch("query_status")
 
-    if the_like.valid?
-      the_like.save
-      redirect_to("/likes/#{the_like.id}", { :notice => "Like updated successfully."} )
+    if the_follow_request.valid?
+      the_follow_request.save
+      redirect_to("/follow_requests/#{the_follow_request.id}", { :notice => "Follow request updated successfully." })
     else
-      redirect_to("/likes/#{the_like.id}", { :alert => the_like.errors.full_messages.to_sentence })
+      redirect_to("/follow_requests/#{the_follow_request.id}", { :alert => the_follow_request.errors.full_messages.to_sentence })
     end
   end
 
   def destroy
     the_id = params.fetch("path_id")
-    the_like = Like.where({ :id => the_id }).at(0)
+    the_follow_request = FollowRequest.where({ :id => the_id }).at(0)
 
-    the_like.destroy
+    the_follow_request.destroy
 
-    redirect_to("/likes", { :notice => "Like deleted successfully."} )
+    redirect_to("/follow_requests", { :notice => "Follow request deleted successfully." })
   end
 end
