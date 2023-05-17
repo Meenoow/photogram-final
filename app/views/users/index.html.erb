@@ -31,7 +31,7 @@
             <%= a_user.private ? "Yes" : "No" %>
           </td>
           <td>
-            <%= render "user/follow_request", user: a_user %>
+            <%= render "users/follow_request", user: a_user %>
           </td>
           <td>
             <a href="/users/<%= a_user.username %>">
