@@ -18,7 +18,7 @@
   <h4>Pending follow requests</h4>
      <%@pending_followers.each do |request| %>
        <%if request.status == "pending"%>
-       <%= request.recipient.username %>
+       <%=request.recipient.username %>
        <div>
               <form action="/modify_follow_request/<%=request.id%>"  method="post" >
 
