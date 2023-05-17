@@ -21,7 +21,8 @@ class FollowRequestsController < ApplicationController
     follow_request = FollowRequest.new
     follow_request.recipient_id = params.fetch("query_recipient_id")
     follow_request.sender_id = session.fetch(:user_id)
-
+    waiting = follow_request.status.count
+    
     if follow_request.recipient.private
       follow_request.status = "pending"
     else
